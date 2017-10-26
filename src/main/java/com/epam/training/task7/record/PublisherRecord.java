@@ -14,7 +14,7 @@ public class PublisherRecord extends Record{
     private final String id;
     private List<String> bookIds;
 
-    private PublisherRecord(String id, List<String> bookIds) {
+    public PublisherRecord(String id, List<String> bookIds) {
         this.id = id;
         this.bookIds = bookIds;
     }

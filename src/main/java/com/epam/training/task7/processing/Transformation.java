@@ -49,7 +49,7 @@ public abstract class Transformation {
         return data;
     }
 
-    private static Map<String, Author> transformAuthorRecordsToAuthors(List<AuthorRecord> authorRecords) {
+    protected static Map<String, Author> transformAuthorRecordsToAuthors(List<AuthorRecord> authorRecords) {
         Map<String, Author> authors = new HashMap<>();
         for (AuthorRecord authorRecord : authorRecords) {
             try {
@@ -63,16 +63,16 @@ public abstract class Transformation {
         return authors;
     }
 
-    private static Author validateFieldsAndCreateAuthor(AuthorRecord authorRecord) throws ValidateDataException {
+    protected static Author validateFieldsAndCreateAuthor(AuthorRecord authorRecord) throws ValidateDataException {
         LocalDate dateOfBirth = authorRecord.getDateOfBirth();
         LocalDate dateOfDeath = authorRecord.getDateOfDeath();
-        if (dateOfBirth != null && dateOfDeath != null && dateOfDeath.isBefore(dateOfBirth)) {
+        if (dateOfBirth != null && dateOfDeath != null && dateOfBirth.isBefore(dateOfDeath)) {
             throw new ValidateDataException("dateOfBirth late dateOfBirth of the author " + authorRecord.getId());
         }
         return new Author(authorRecord.getName(), dateOfBirth, dateOfDeath, authorRecord.getGender());
     }
 
-    private static Map<String, Book> transformBookRecordsToBooks(List<BookRecord> bookRecords, Map<String, Author> authors) {
+    protected static Map<String, Book> transformBookRecordsToBooks(List<BookRecord> bookRecords, Map<String, Author> authors) {
         Map<String, Book> books = new HashMap<>();
         for (BookRecord bookRecord : bookRecords) {
             try {
@@ -86,7 +86,7 @@ public abstract class Transformation {
         return books;
     }
 
-    private static Book validateFieldsAndCreateBook(BookRecord bookRecord, Map<String, Author> authors) throws ValidateDataException {
+    protected static Book validateFieldsAndCreateBook(BookRecord bookRecord, Map<String, Author> authors) throws ValidateDataException {
         List<Author> authorList = new ArrayList<>();
         for (String authorId : bookRecord.getAuthorsIds()) {
             Author author = authors.get(authorId);
@@ -101,11 +101,11 @@ public abstract class Transformation {
         return new Book(bookRecord.getName(), bookRecord.getDateOfRelease(), authorList);
     }
 
-    private static Map<String, Publisher> transformPublisherRecordsToPublisher(List<PublisherRecord> publisherRecords, Map<String, Book> books) {
+    protected static Map<String, Publisher> transformPublisherRecordsToPublisher(List<PublisherRecord> publisherRecords, Map<String, Book> books) {
         Map<String, Publisher> publishers = new HashMap<>();
         for (PublisherRecord publisherRecord : publisherRecords) {
             try {
-                Publisher publisher = validateFieldsAndCreatePublishers(publisherRecord, books);
+                Publisher publisher = validateFieldsAndCreatePublisher(publisherRecord, books);
                 publishers.put(publisherRecord.getId(), publisher);
             } catch (ValidateDataException e) {
                 //TODO FIX TO LOG
@@ -115,7 +115,7 @@ public abstract class Transformation {
         return publishers;
     }
 
-    private static Publisher validateFieldsAndCreatePublishers(PublisherRecord publisherRecord, Map<String, Book> books) throws ValidateDataException {
+    protected static Publisher validateFieldsAndCreatePublisher(PublisherRecord publisherRecord, Map<String, Book> books) throws ValidateDataException {
         List<Book> bookList = new ArrayList<>();
         for (String bookId : publisherRecord.getBookIds()) {
             Book book = books.get(bookId);

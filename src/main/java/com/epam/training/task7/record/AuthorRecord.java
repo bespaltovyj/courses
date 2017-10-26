@@ -17,7 +17,7 @@ public class AuthorRecord extends Record{
     private LocalDate dateOfDeath;
     private Gender gender;
 
-    private AuthorRecord(String id, String name, LocalDate dateOfBirth, LocalDate dateOfDeath, Gender gender) {
+    public AuthorRecord(String id, String name, LocalDate dateOfBirth, LocalDate dateOfDeath, Gender gender) {
         this.id = id;
         this.name = name;
         this.dateOfBirth = dateOfBirth;

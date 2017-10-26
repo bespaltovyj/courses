@@ -17,7 +17,7 @@ public class BookRecord extends Record{
     private LocalDate dateOfRelease;
     private List<String> authorsIds;
 
-    private BookRecord(String id, String name, LocalDate dateOfRelease, List<String> authorsIds) {
+    public BookRecord(String id, String name, LocalDate dateOfRelease, List<String> authorsIds) {
         this.id = id;
         this.name = name;
         this.dateOfRelease = dateOfRelease;
