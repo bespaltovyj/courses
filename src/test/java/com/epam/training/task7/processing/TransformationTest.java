@@ -21,7 +21,7 @@ class TransformationTest {
     @DisplayName("check dateOfBirth and dateOfDeath in author")
     void validateFieldsAndCreateAuthor() {
         LocalDate dateOfBirth = LocalDate.of(2017, 12, 12);
-        LocalDate dateOfDeath = LocalDate.of(2000, 12, 11);
+        LocalDate dateOfDeath = LocalDate.of(2067, 12, 11);
         AuthorRecord authorRecord = new AuthorRecord("1", "name", dateOfDeath, dateOfBirth, Gender.MALE);
         Executable executable = () -> Transformation.validateFieldsAndCreateAuthor(authorRecord);
         assertThrows(ValidateDataException.class, executable);

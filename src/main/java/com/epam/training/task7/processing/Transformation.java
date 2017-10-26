@@ -66,7 +66,7 @@ public abstract class Transformation {
     protected static Author validateFieldsAndCreateAuthor(AuthorRecord authorRecord) throws ValidateDataException {
         LocalDate dateOfBirth = authorRecord.getDateOfBirth();
         LocalDate dateOfDeath = authorRecord.getDateOfDeath();
-        if (dateOfBirth != null && dateOfDeath != null && dateOfBirth.isBefore(dateOfDeath)) {
+        if (dateOfBirth != null && dateOfDeath != null && dateOfBirth.isAfter(dateOfDeath)) {
             throw new ValidateDataException("dateOfBirth late dateOfBirth of the author " + authorRecord.getId());
         }
         return new Author(authorRecord.getName(), dateOfBirth, dateOfDeath, authorRecord.getGender());
