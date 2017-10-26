@@ -1,56 +1,53 @@
-package com.epam.training.task7;
-
+package com.epam.training.task7.processing;
 
 import com.epam.training.task7.data.*;
-import com.epam.training.task7.processing.SaveAndLoad;
-import com.epam.training.task7.processing.SaveAndLoadByHumanReadableFormat;
-import com.epam.training.task7.processing.SaveAndLoadBySerialization;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class Test {
+import static org.junit.jupiter.api.Assertions.*;
 
-    public static void test() {
+class SaveAndLoadTest {
+    Data data;
+
+    @BeforeEach
+    void setUp() {
         List<Author> authors = new ArrayList<>();
         List<Book> books = new ArrayList<>();
         List<Publisher> publishers = new ArrayList<>();
 
-        Test.fillAuthorsAndBooksAndPublishersList(authors, books, publishers);
-        Data data = new Data(authors, books, publishers);
-
-
-        try {
-            final File humanReadableFile = new File("./src/com/epam/training/task7/humanReadable.txt");
-
-            SaveAndLoad saveAndLoadByHumanReadableFormat = new SaveAndLoadByHumanReadableFormat();
-            saveAndLoadByHumanReadableFormat.save(data, humanReadableFile);
-            Data loadDataByHumanReadable = saveAndLoadByHumanReadableFormat.load(humanReadableFile);
-
-            System.out.print("Result of comparison of old data and of load data by human-readable format: ");
-            System.out.println(Objects.equals(data, loadDataByHumanReadable));
-
-            final File serializationFile = new File("./src/com/epam/training/task7/serializationFile");
-            SaveAndLoad saveAndLoadBySerialization = new SaveAndLoadBySerialization();
-            saveAndLoadBySerialization.save(data, serializationFile);
-            Data loadDataBySerialization = saveAndLoadBySerialization.load(serializationFile);
-
-            System.out.print("Result of comparison of old data and of load data by serialization format: ");
-            System.out.println(Objects.equals(data, loadDataBySerialization));
-
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
+        fillAuthorsAndBooksAndPublishersList(authors, books, publishers);
+        data = new Data(authors, books, publishers);
     }
 
 
-    public static void fillAuthorsAndBooksAndPublishersList(List<Author> authors, List<Book> books, List<Publisher> publishers) {
+    @Test
+    void testSerialization() throws Exception {
+        SaveAndLoad serialization = new SaveAndLoadBySerialization();
+        final File file = new File("./src/main/java/com/epam/training/task7/serializationFile");
+        serialization.save(data, file);
+        Data loadData = serialization.load(file);
+        assertEquals(data, loadData);
+    }
+
+    @Test
+    void testHumanReadableFormat() throws Exception {
+        final File file = new File("./src/main/java/com/epam/training/task7/humanReadable.txt");
+        SaveAndLoad saveAndLoadByHumanReadableFormat = new SaveAndLoadByHumanReadableFormat();
+        saveAndLoadByHumanReadableFormat.save(data, file);
+        Data loadData = saveAndLoadByHumanReadableFormat.load(file);
+        assertEquals(data, loadData);
+    }
+
+    private static void fillAuthorsAndBooksAndPublishersList(List<Author> authors, List<Book> books, List<Publisher> publishers) {
         Author authorBridge = new Author(
                 "Bridge"
                 , LocalDate.of(1889, Month.SEPTEMBER, 11)
@@ -142,4 +139,6 @@ public class Test {
         publishers.add(eksmo);
         publishers.add(luck);
     }
+
+
 }
