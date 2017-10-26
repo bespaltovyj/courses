@@ -82,15 +82,15 @@ public class SaveAndLoadByHumanReadableFormat implements SaveAndLoad {
                     String nameArray = matcherForNameArrayAndArray.group(Configuration.NAME_GROUP_WITH_NAME_OF_ARRAY);
                     switch (nameArray) {
                         case Configuration.NAME_OF_ARRAY_OF_AUTHORS:
-                            AuthorRecord author = AuthorRecord.readAuthorRecordFromString(instance);
+                            AuthorRecord author = AuthorRecord.getInstanceFromString(instance);
                             authors.add(author);
                             break;
                         case Configuration.NAME_OF_ARRAY_OF_BOOKS:
-                            BookRecord book = BookRecord.readBookRecordFromString(instance);
+                            BookRecord book = BookRecord.getInstanceFromString(instance);
                             books.add(book);
                             break;
                         case Configuration.NAME_OF_ARRAY_OF_PUBLISHERS:
-                            PublisherRecord publisher = PublisherRecord.readPublisherRecordFromString(instance);
+                            PublisherRecord publisher = PublisherRecord.getInstanceFromString(instance);
                             publishers.add(publisher);
                             break;
                         default:

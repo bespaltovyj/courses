@@ -35,6 +35,10 @@ public class PublisherRecord {
 
     @Override
     public String toString() {
+        return getInstanceAsString();
+    }
+
+    public String getInstanceAsString() {
         StringBuilder builder = new StringBuilder();
         builder.append(Configuration.LEFT_BORDER_AROUND_INSTANCE);
         builder.append(id);
@@ -44,7 +48,7 @@ public class PublisherRecord {
         return builder.toString();
     }
 
-    public static PublisherRecord readPublisherRecordFromString(String publisherInString) throws LoadDataException {
+    public static PublisherRecord getInstanceFromString(String publisherInString) throws LoadDataException {
         Matcher matcherForInstance = Configuration.PATTERN_FOR_INSTANCE_PUBLISHER.matcher(publisherInString);
         if (!matcherForInstance.matches()) {
             throw new LoadDataException("String representation of the publisher is incorrect: " + publisherInString);

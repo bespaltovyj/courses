@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.regex.Matcher;
 
-public class AuthorRecord {
+public class AuthorRecord{
 
     private final String id;
     private String name;
@@ -59,6 +59,15 @@ public class AuthorRecord {
 
     @Override
     public String toString() {
+        return getInstanceAsString();
+    }
+
+
+    public static String hashCode(Author author) {
+        return String.valueOf(author.hashCode());
+    }
+
+    public String getInstanceAsString() {
         StringBuilder builder = new StringBuilder();
         builder.append(Configuration.LEFT_BORDER_AROUND_INSTANCE);
         builder.append(id);
@@ -74,10 +83,10 @@ public class AuthorRecord {
         return builder.toString();
     }
 
-    public static AuthorRecord readAuthorRecordFromString(String authorInString) throws LoadDataException {
-        Matcher matcherForInstance = Configuration.PATTERN_FOR_INSTANCE_AUTHOR.matcher(authorInString);
+    public static AuthorRecord getInstanceFromString(String instanceInString) throws LoadDataException {
+        Matcher matcherForInstance = Configuration.PATTERN_FOR_INSTANCE_AUTHOR.matcher(instanceInString);
         if (!matcherForInstance.matches()) {
-            throw new LoadDataException("String representation of the author is incorrect: " + authorInString);
+            throw new LoadDataException("String representation of the author is incorrect: " + instanceInString);
         }
 
         String id = matcherForInstance.group(Configuration.NAME_GROUP_FOR_FIELD_AUTHOR_ID);
@@ -115,9 +124,4 @@ public class AuthorRecord {
         );
         return author;
     }
-
-    public static String hashCode(Author author) {
-        return String.valueOf(author.hashCode());
-    }
-
 }

@@ -50,6 +50,10 @@ public class BookRecord {
 
     @Override
     public String toString() {
+        return getInstanceAsString();
+    }
+
+    public String getInstanceAsString() {
         StringBuilder builder = new StringBuilder();
         builder.append(Configuration.LEFT_BORDER_AROUND_INSTANCE);
         builder.append(id);
@@ -63,7 +67,7 @@ public class BookRecord {
         return builder.toString();
     }
 
-    public static BookRecord readBookRecordFromString(String bookInString) throws LoadDataException {
+    public static BookRecord getInstanceFromString(String bookInString) throws LoadDataException {
         Matcher matcherForInstance = Configuration.PATTERN_FOR_INSTANCE_BOOK.matcher(bookInString);
         if (!matcherForInstance.matches()) {
             throw new LoadDataException("String representation of the book is incorrect: " + bookInString);
