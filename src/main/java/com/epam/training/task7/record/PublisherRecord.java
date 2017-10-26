@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
-public class PublisherRecord {
+public class PublisherRecord extends Record{
 
     private final String id;
     private List<String> bookIds;
@@ -34,10 +34,6 @@ public class PublisherRecord {
     }
 
     @Override
-    public String toString() {
-        return getInstanceAsString();
-    }
-
     public String getInstanceAsString() {
         StringBuilder builder = new StringBuilder();
         builder.append(Configuration.LEFT_BORDER_AROUND_INSTANCE);
@@ -76,11 +72,7 @@ public class PublisherRecord {
             booksIds.add(bookId);
         }
 
-        PublisherRecord publisher = new PublisherRecord(
-                id
-                , booksIds
-
-        );
+        PublisherRecord publisher = new PublisherRecord(id, booksIds);
         return publisher;
     }
 

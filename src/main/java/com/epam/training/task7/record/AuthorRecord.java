@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.regex.Matcher;
 
-public class AuthorRecord{
+public class AuthorRecord extends Record{
 
     private final String id;
     private String name;
@@ -57,16 +57,12 @@ public class AuthorRecord{
         return Period.between(this.getDateOfBirth(), this.getDateOfDeath() != null ? dateOfDeath : LocalDate.now()).getYears();
     }
 
-    @Override
-    public String toString() {
-        return getInstanceAsString();
-    }
-
 
     public static String hashCode(Author author) {
         return String.valueOf(author.hashCode());
     }
 
+    @Override
     public String getInstanceAsString() {
         StringBuilder builder = new StringBuilder();
         builder.append(Configuration.LEFT_BORDER_AROUND_INSTANCE);

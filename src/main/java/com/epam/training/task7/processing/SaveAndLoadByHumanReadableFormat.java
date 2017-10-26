@@ -3,10 +3,7 @@ package com.epam.training.task7.processing;
 import com.epam.training.task7.Configuration;
 import com.epam.training.task7.data.*;
 import com.epam.training.task7.exception.LoadDataException;
-import com.epam.training.task7.record.AuthorRecord;
-import com.epam.training.task7.record.BookRecord;
-import com.epam.training.task7.record.DataRecord;
-import com.epam.training.task7.record.PublisherRecord;
+import com.epam.training.task7.record.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -41,12 +38,12 @@ public class SaveAndLoadByHumanReadableFormat implements SaveAndLoad {
         }
     }
 
-    private <T> void writeArray(PrintWriter writer, String nameArray, List<T> arrays) {
+    private void writeArray(PrintWriter writer, String nameArray, List<? extends Record> arrays) {
         writer.print(nameArray);
         writer.print(Configuration.SEPARATOR_BETWEEN_ARRAY_NAME_AND_ARRAY);
         writer.print(Configuration.LEFT_BORDER_AROUND_ARRAY);
         String arrayInString = arrays.stream()
-                .map(Object::toString)
+                .map(StringRepresentation::getInstanceAsString)
                 .reduce((x, y) -> x + Configuration.SEPARATOR_BETWEEN_ELEMENTS_IN_ARRAY + "\n" + y)
                 .get();
         writer.print(arrayInString);

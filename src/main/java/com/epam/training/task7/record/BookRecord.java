@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
-public class BookRecord {
+public class BookRecord extends Record{
 
     private final String id;
     private String name;
@@ -49,10 +49,6 @@ public class BookRecord {
     }
 
     @Override
-    public String toString() {
-        return getInstanceAsString();
-    }
-
     public String getInstanceAsString() {
         StringBuilder builder = new StringBuilder();
         builder.append(Configuration.LEFT_BORDER_AROUND_INSTANCE);
