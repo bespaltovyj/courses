@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
-public class BookRecord extends Record{
+public class BookRecord extends Record {
 
     private final String id;
     private String name;
@@ -79,9 +79,9 @@ public class BookRecord extends Record{
             throw new LoadDataException("String representation name of the book is incorrect: " + name);
         }
 
-        String dateOfRelease = matcherForInstance.group(Configuration.NAME_GROUP_FOR_FIELD_BOOK_DATE_OF_RELEASE);
-        if (!Configuration.PATTEN_FOR_CHECK_DATE.matcher(dateOfRelease).matches()) {
-            throw new LoadDataException("String representation dateOfRelease of the book is incorrect: " + dateOfRelease);
+        String dateOfReleaseAsString = matcherForInstance.group(Configuration.NAME_GROUP_FOR_FIELD_BOOK_DATE_OF_RELEASE);
+        if (!Configuration.PATTEN_FOR_CHECK_DATE.matcher(dateOfReleaseAsString).matches()) {
+            throw new LoadDataException("String representation dateOfRelease of the book is incorrect: " + dateOfReleaseAsString);
         }
 
         String arrayAuthorsIds = matcherForInstance.group(Configuration.NAME_GROUP_FOR_FIELD_BOOK_AUTHORS_IDS);
@@ -101,14 +101,8 @@ public class BookRecord extends Record{
             authorsIds.add(authorId);
         }
 
-        BookRecord book = new BookRecord(
-                id
-                , name
-                , Configuration.NULL_IN_FILE.equals(dateOfRelease) ? null : LocalDate.parse(dateOfRelease)
-                , authorsIds
-
-        );
-        return book;
+        LocalDate dateOfRelease = Configuration.NULL_IN_FILE.equals(dateOfReleaseAsString) ? null : LocalDate.parse(dateOfReleaseAsString);
+        return new BookRecord(id, name, dateOfRelease, authorsIds);
     }
 
     public static String hashCode(Book book) {

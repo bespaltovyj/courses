@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.regex.Matcher;
 
-public class AuthorRecord extends Record{
+public class AuthorRecord extends Record {
 
     private final String id;
     private String name;
@@ -95,14 +95,14 @@ public class AuthorRecord extends Record{
             throw new LoadDataException("String representation name of the author is incorrect: " + name);
         }
 
-        String dateOfBirth = matcherForInstance.group(Configuration.NAME_GROUP_FOR_FIELD_AUTHOR_DATE_OF_BIRTH);
-        if (!Configuration.PATTEN_FOR_CHECK_DATE.matcher(dateOfBirth).matches()) {
-            throw new LoadDataException("String representation dateOfBirth of the author is incorrect: " + dateOfBirth);
+        String dateOfBirthAsString = matcherForInstance.group(Configuration.NAME_GROUP_FOR_FIELD_AUTHOR_DATE_OF_BIRTH);
+        if (!Configuration.PATTEN_FOR_CHECK_DATE.matcher(dateOfBirthAsString).matches()) {
+            throw new LoadDataException("String representation dateOfBirth of the author is incorrect: " + dateOfBirthAsString);
         }
 
-        String dateOfDeath = matcherForInstance.group(Configuration.NAME_GROUP_FOR_FIELD_AUTHOR_DATE_OF_DEATH);
-        if (!Configuration.PATTEN_FOR_CHECK_DATE.matcher(dateOfDeath).matches()) {
-            throw new LoadDataException("String representation dateOfDeath of the author is incorrect: " + dateOfDeath);
+        String dateOfDeathAsString = matcherForInstance.group(Configuration.NAME_GROUP_FOR_FIELD_AUTHOR_DATE_OF_DEATH);
+        if (!Configuration.PATTEN_FOR_CHECK_DATE.matcher(dateOfDeathAsString).matches()) {
+            throw new LoadDataException("String representation dateOfDeath of the author is incorrect: " + dateOfDeathAsString);
         }
 
         String gender = matcherForInstance.group(Configuration.NAME_GROUP_FOR_FIELD_AUTHOR_GENDER);
@@ -110,14 +110,9 @@ public class AuthorRecord extends Record{
             throw new LoadDataException("String representation gender of the author is incorrect: " + gender);
         }
 
-        AuthorRecord author = new AuthorRecord(
-                id
-                , name
-                , Configuration.NULL_IN_FILE.equals(dateOfBirth) ? null : LocalDate.parse(dateOfBirth)
-                , Configuration.NULL_IN_FILE.equals(dateOfDeath) ? null : LocalDate.parse(dateOfDeath)
-                , Gender.valueOf(gender)
+        LocalDate dateOfBirth = Configuration.NULL_IN_FILE.equals(dateOfBirthAsString) ? null : LocalDate.parse(dateOfBirthAsString);
+        LocalDate dateOfDeath = Configuration.NULL_IN_FILE.equals(dateOfDeathAsString) ? null : LocalDate.parse(dateOfDeathAsString);
 
-        );
-        return author;
+        return new AuthorRecord(id, name, dateOfBirth, dateOfDeath, Gender.valueOf(gender));
     }
 }

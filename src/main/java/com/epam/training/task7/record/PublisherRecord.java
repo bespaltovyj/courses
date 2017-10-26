@@ -72,8 +72,7 @@ public class PublisherRecord extends Record{
             booksIds.add(bookId);
         }
 
-        PublisherRecord publisher = new PublisherRecord(id, booksIds);
-        return publisher;
+        return new PublisherRecord(id, booksIds);
     }
 
     public static String hashCode(Publisher publisher) {
