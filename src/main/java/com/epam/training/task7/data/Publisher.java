@@ -13,15 +13,6 @@ public class Publisher implements Serializable {
         this.books = books;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(Configuration.LEFT_BORDER_AROUND_INSTANCE);
-        builder.append(books);
-        builder.append(Configuration.RIGHT_BORDER_AROUND_INSTANCE);
-        return builder.toString();
-    }
-
     public List<Book> getBooks() {
         return books;
     }

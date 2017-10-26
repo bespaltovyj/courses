@@ -41,20 +41,6 @@ public class Author implements Serializable {
         return Period.between(this.getDateOfBirth(), this.getDateOfDeath() != null ? dateOfDeath : LocalDate.now()).getYears();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(Configuration.LEFT_BORDER_AROUND_INSTANCE);
-        builder.append(name);
-        builder.append(Configuration.SEPARATOR_BETWEEN_FIELDS_IN_ELEMENT);
-        builder.append(dateOfBirth);
-        builder.append(Configuration.SEPARATOR_BETWEEN_FIELDS_IN_ELEMENT);
-        builder.append(dateOfDeath);
-        builder.append(Configuration.SEPARATOR_BETWEEN_FIELDS_IN_ELEMENT);
-        builder.append(gender);
-        builder.append(Configuration.RIGHT_BORDER_AROUND_INSTANCE);
-        return builder.toString();
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -31,18 +31,6 @@ public class Book implements Serializable {
         return authors;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(Configuration.LEFT_BORDER_AROUND_INSTANCE);
-        builder.append(name);
-        builder.append(Configuration.SEPARATOR_BETWEEN_FIELDS_IN_ELEMENT);
-        builder.append(dateOfRelease);
-        builder.append(Configuration.SEPARATOR_BETWEEN_FIELDS_IN_ELEMENT);
-        builder.append(authors);
-        builder.append(Configuration.RIGHT_BORDER_AROUND_INSTANCE);
-        return builder.toString();
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -23,20 +23,6 @@ public class Data implements Serializable {
         this.publishers = publishers;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(Configuration.LEFT_BORDER_AROUND_INSTANCE);
-        builder.append(authors);
-        builder.append(Configuration.SEPARATOR_BETWEEN_ARRAYS);
-        builder.append('\n');
-        builder.append(books);
-        builder.append(Configuration.SEPARATOR_BETWEEN_ARRAYS);
-        builder.append('\n');
-        builder.append(publishers);
-        builder.append(Configuration.RIGHT_BORDER_AROUND_INSTANCE);
-        return builder.toString();
-    }
 
     public List<Author> getAuthors() {
         return authors;
