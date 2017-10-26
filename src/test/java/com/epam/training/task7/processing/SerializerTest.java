@@ -1,12 +1,11 @@
 package com.epam.training.task7.processing;
 
 import com.epam.training.task7.data.*;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -15,8 +14,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SaveAndLoadTest {
+class SerializerTest {
     Data data;
+
+    static final String packageName = "com/epam/training/task7/";
 
     @BeforeEach
     void setUp() {
@@ -31,8 +32,9 @@ class SaveAndLoadTest {
 
     @Test
     void testSerialization() throws Exception {
-        SaveAndLoad serialization = new SaveAndLoadBySerialization();
-        final File file = new File("./src/main/java/com/epam/training/task7/serializationFile");
+        URL url = Thread.currentThread().getContextClassLoader().getResource("");
+        final File file = new File(url.getFile() + packageName + "serializationFile");
+        Serializer serialization = new SerializerIntoBytes();
         serialization.save(data, file);
         Data loadData = serialization.load(file);
         assertEquals(data, loadData);
@@ -40,10 +42,11 @@ class SaveAndLoadTest {
 
     @Test
     void testHumanReadableFormat() throws Exception {
-        final File file = new File("./src/main/java/com/epam/training/task7/humanReadable.txt");
-        SaveAndLoad saveAndLoadByHumanReadableFormat = new SaveAndLoadByHumanReadableFormat();
-        saveAndLoadByHumanReadableFormat.save(data, file);
-        Data loadData = saveAndLoadByHumanReadableFormat.load(file);
+        URL url = Thread.currentThread().getContextClassLoader().getResource("");
+        final File file = new File(url.getFile() + packageName + "humanReadable.txt");
+        Serializer serializerByHumanReadableFormat = new SerializerIntoHumanReadableFormat();
+        serializerByHumanReadableFormat.save(data, file);
+        Data loadData = serializerByHumanReadableFormat.load(file);
         assertEquals(data, loadData);
     }
 
