@@ -24,7 +24,7 @@ import java.util.regex.Matcher;
  * Spaces and line breaking are ignored when parsing files
  * All parameters specified in the Configuration file.
  */
-public class SaveAndLoadByHumanReadableFormat implements SaveAndLoad {
+public class SerializerIntoHumanReadableFormat implements Serializer {
 
     @Override
     public void save(Data data, File file) throws FileNotFoundException {
@@ -67,8 +67,8 @@ public class SaveAndLoadByHumanReadableFormat implements SaveAndLoad {
             }
             String arrayInstances = matcherForNameArrayAndArray.group(Configuration.NAME_GROUP_WITH_ARRAY);
             String[] instances = arrayInstances.split(String.valueOf(Configuration.SEPARATOR_BETWEEN_ELEMENTS_IN_ARRAY));
+            String nameArray = matcherForNameArrayAndArray.group(Configuration.NAME_GROUP_WITH_NAME_OF_ARRAY);
             for (String instance : instances) {
-                String nameArray = matcherForNameArrayAndArray.group(Configuration.NAME_GROUP_WITH_NAME_OF_ARRAY);
                 switch (nameArray) {
                     case Configuration.NAME_OF_ARRAY_OF_AUTHORS:
                         AuthorRecord author = AuthorRecord.getInstanceFromString(instance);

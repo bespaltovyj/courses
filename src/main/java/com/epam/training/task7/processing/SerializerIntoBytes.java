@@ -1,14 +1,10 @@
 package com.epam.training.task7.processing;
 
-import com.epam.training.task7.data.Author;
-import com.epam.training.task7.data.Book;
 import com.epam.training.task7.data.Data;
-import com.epam.training.task7.data.Publisher;
 
 import java.io.*;
-import java.util.List;
 
-public class SaveAndLoadBySerialization implements SaveAndLoad {
+public class SerializerIntoBytes implements Serializer {
 
     @Override
     public void save(Data data, File file) throws IOException {

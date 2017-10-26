@@ -4,7 +4,7 @@ import com.epam.training.task7.data.Data;
 
 import java.io.File;
 
-public interface SaveAndLoad {
+public interface Serializer {
     void save(Data data, File file) throws Exception;
 
     Data load(File file) throws Exception;
