@@ -95,7 +95,7 @@ public abstract class Transformation {
             }
             authorList.add(author);
         }
-        if (authorList.size() < 1) {
+        if (authorList.isEmpty()) {
             throw new ValidateDataException("Book " + bookRecord.getId() + " has not authors");
         }
         return new Book(bookRecord.getName(), bookRecord.getDateOfRelease(), authorList);
