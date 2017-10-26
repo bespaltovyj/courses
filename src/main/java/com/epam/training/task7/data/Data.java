@@ -8,9 +8,10 @@ import com.epam.training.task7.record.AuthorRecord;
 import com.epam.training.task7.record.BookRecord;
 import com.epam.training.task7.record.PublisherRecord;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Data {
+public class Data implements Serializable {
 
     private List<Author> authors;
     private List<Book> books;
