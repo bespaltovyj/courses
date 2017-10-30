@@ -35,8 +35,9 @@ class SerializerTest {
         URL url = Thread.currentThread().getContextClassLoader().getResource("");
         final File file = new File(url.getFile() + packageName + "serializationFile");
         Serializer serialization = new SerializerIntoBytes();
-        serialization.save(data, file);
-        Data loadData = serialization.load(file);
+        serialization.serialize(data, file);
+        Deserializer deserializer = new DeserializerFromBytes();
+        Data loadData = deserializer.deserialize(file);
         assertEquals(data, loadData);
     }
 
@@ -44,9 +45,10 @@ class SerializerTest {
     void testHumanReadableFormat() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("");
         final File file = new File(url.getFile() + packageName + "humanReadable.txt");
-        Serializer serializerByHumanReadableFormat = new SerializerIntoHumanReadableFormat();
-        serializerByHumanReadableFormat.save(data, file);
-        Data loadData = serializerByHumanReadableFormat.load(file);
+        Serializer serializer = new SerializerIntoHumanReadableFormat();
+        serializer.serialize(data, file);
+        Deserializer deserializer = new DeserializerFromHumanReadableFormat();
+        Data loadData = deserializer.deserialize(file);
         assertEquals(data, loadData);
     }
 

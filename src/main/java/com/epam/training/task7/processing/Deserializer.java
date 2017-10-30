@@ -4,8 +4,6 @@ import com.epam.training.task7.data.Data;
 
 import java.io.File;
 
-public interface Serializer {
-
-    void serialize(Data data, File file) throws Exception;
-
+public interface Deserializer {
+    Data deserialize(File file) throws Exception;
 }

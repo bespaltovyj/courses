@@ -27,7 +27,7 @@ import java.util.regex.Matcher;
 public class SerializerIntoHumanReadableFormat implements Serializer {
 
     @Override
-    public void save(Data data, File file) throws FileNotFoundException {
+    public void serialize(Data data, File file) throws FileNotFoundException {
         try (PrintWriter writer = new PrintWriter(file)) {
 
             DataRecord dataRecord = Transformation.transformDataToRecord(data);
@@ -52,63 +52,6 @@ public class SerializerIntoHumanReadableFormat implements Serializer {
         writer.println();
     }
 
-    @Override
-    public Data load(File file) throws LoadDataException {
-        String allLinesFromFileInOneLine = readAllLinesFromFileInOneString(file);
 
-        List<AuthorRecord> authors = new ArrayList<>();
-        List<BookRecord> books = new ArrayList<>();
-        List<PublisherRecord> publishers = new ArrayList<>();
-
-        for (String arrayInStringRepresentation : allLinesFromFileInOneLine.split(String.valueOf(Configuration.SEPARATOR_BETWEEN_ARRAYS))) {
-            Matcher matcherForNameArrayAndArray = Configuration.PATTERN_FOR_ONE_RECORD.matcher(arrayInStringRepresentation);
-            if (!matcherForNameArrayAndArray.matches()) {
-                throw new LoadDataException("Array " + arrayInStringRepresentation + "incorrect recorded");
-            }
-            String arrayInstances = matcherForNameArrayAndArray.group(Configuration.NAME_GROUP_WITH_ARRAY);
-            String[] instances = arrayInstances.split(String.valueOf(Configuration.SEPARATOR_BETWEEN_ELEMENTS_IN_ARRAY));
-            String nameArray = matcherForNameArrayAndArray.group(Configuration.NAME_GROUP_WITH_NAME_OF_ARRAY);
-            for (String instance : instances) {
-                switch (nameArray) {
-                    case Configuration.NAME_OF_ARRAY_OF_AUTHORS:
-                        AuthorRecord author = AuthorRecord.getInstanceFromString(instance);
-                        authors.add(author);
-                        break;
-                    case Configuration.NAME_OF_ARRAY_OF_BOOKS:
-                        BookRecord book = BookRecord.getInstanceFromString(instance);
-                        books.add(book);
-                        break;
-                    case Configuration.NAME_OF_ARRAY_OF_PUBLISHERS:
-                        PublisherRecord publisher = PublisherRecord.getInstanceFromString(instance);
-                        publishers.add(publisher);
-                        break;
-                    default:
-                        throw new LoadDataException("Array " + arrayInstances + " has incorrect name" + nameArray);
-                }
-            }
-        }
-
-        DataRecord dataRecord = new DataRecord(authors, books, publishers);
-
-        return Transformation.transformRecordToData(dataRecord);
-    }
-
-    private String readAllLinesFromFileInOneString(File file) throws LoadDataException {
-        try (FileInputStream fileInputStream = new FileInputStream(file)) {
-            byte[] allLinesFromFileInByteFormat = new byte[fileInputStream.available()];
-            final int countReadBytes = fileInputStream.read(allLinesFromFileInByteFormat);
-            if (countReadBytes < 0) {
-                return null;
-            }
-            String allLinesFromFileInOneString = new String(allLinesFromFileInByteFormat);
-            // removing spaces and line breaking
-            allLinesFromFileInOneString = allLinesFromFileInOneString.replaceAll("\\s*\\n*", "");
-            return allLinesFromFileInOneString;
-        } catch (FileNotFoundException e) {
-            throw new LoadDataException("File " + file + " does not exist", e);
-        } catch (IOException e) {
-            throw new LoadDataException("IOException in file " + file, e);
-        }
-    }
 
 }
