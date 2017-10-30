@@ -64,4 +64,13 @@ public class Book implements Serializable {
         result = 31 * result + (authors != null ? authors.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "name='" + name + '\'' +
+                ", dateOfRelease=" + dateOfRelease +
+                ", authors=" + authors +
+                '}';
+    }
 }

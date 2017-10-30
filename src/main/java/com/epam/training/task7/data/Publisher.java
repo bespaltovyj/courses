@@ -40,4 +40,9 @@ public class Publisher implements Serializable {
     public int hashCode() {
         return books != null ? books.hashCode() : 0;
     }
+
+    @Override
+    public String toString() {
+        return "Publisher{" + "books=" + books + '}';
+    }
 }

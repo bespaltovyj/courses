@@ -65,4 +65,10 @@ public class Data implements Serializable {
         }
         return true;
     }
+
+    public void print() {
+        System.out.println("Authors: " + authors);
+        System.out.println("Books: " + books);
+        System.out.println("Publishers: " + publishers);
+    }
 }

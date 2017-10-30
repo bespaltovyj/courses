@@ -72,4 +72,14 @@ public class Author implements Serializable {
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "name='" + name + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", dateOfDeath=" + dateOfDeath +
+                ", gender=" + gender +
+                '}';
+    }
 }
