@@ -8,6 +8,10 @@
     <Appenders>
         <RollingFile name="RollingFile" fileName="${traceFileName}"
                      filePattern="logs/$${date:yyyy-MM}/%d{MM-dd-yyyy}-%i.log">
+            <Filters>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="fatal" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
             <PatternLayout>
                 <Pattern>%d{HH:mm:ss} [%t] %-5level %logger - %msg%n"</Pattern>
             </PatternLayout>
@@ -19,6 +23,10 @@
 
         <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss} [%t] %-5level %logger - %msg%n"/>
+            <Filters>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="fatal" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
         </Console>
 
         <File name="errorFile" fileName="${errorFileName}">
