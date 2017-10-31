@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--xmlns="http://logging.apache.org/log4j/2.0/config"-->
+<Configuration>
+    <Properties>
+        <Property name="errorFileName">logs/error.log</Property>
+        <Property name="traceFileName">logs/trace.log</Property>
+    </Properties>
+    <Appenders>
+        <RollingFile name="RollingFile" fileName="${traceFileName}"
+                     filePattern="logs/$${date:yyyy-MM}/%d{MM-dd-yyyy}-%i.log">
+            <PatternLayout>
+                <Pattern>%d{HH:mm:ss} [%t] %-5level %logger - %msg%n"</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss} [%t] %-5level %logger - %msg%n"/>
+        </Console>
+
+        <File name="errorFile" fileName="${errorFileName}">
+            <PatternLayout>
+                <Pattern>%d{HH:mm:ss} [%t] %-5level %logger - %msg%n</Pattern>
+            </PatternLayout>
+        </File>
+
+    </Appenders>
+    <Loggers>
+        <Root level="error">
+            <AppenderRef ref="errorFile"/>
+        </Root>
+        <!--<Logger name="errorLogger" level="error">
+            <AppenderRef ref="errorFile"/>
+        </Logger>-->
+        <Logger name="traceLogger" level="trace" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+    </Loggers>
+</Configuration>
+
