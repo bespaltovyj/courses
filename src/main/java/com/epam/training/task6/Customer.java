@@ -1,14 +1,14 @@
 package com.epam.training.task6;
 
+import com.epam.training.task6.visitor.PrinterNode;
+
 public class Customer {
 
-    public void printTree(Node tree) {
+    public void printTree(Tree tree) {
         for (Node node : tree) {
-            if (node.isLeaf()) {
-                System.out.println("It is leaf");
-                continue;
-            }
-            System.out.println("It is branch");
+            node.accept(new PrinterNode());
         }
     }
+
+
 }

@@ -12,18 +12,19 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class NodeTest {
-    Node parentNode;
+    Tree tree;
 
-    /** This method creates such a tree:
-     *                      1
-     *             2       3     4     8
-     *          5    6   7
-     *BFS: 1,2,3,4,8,5,6,7
-     *DFT: 1,2,5,6,3,7,4,8
+    /**
+     * This method creates such a tree:
+     * 1
+     * 2       3     4     8
+     * 5    6   7
+     * BFS: 1,2,3,4,8,5,6,7
+     * DFT: 1,2,5,6,3,7,4,8
      */
     @BeforeEach
     void setUp() {
-        parentNode = new Node(1);
+        Node parentNode = new Node(1);
 
         Node node2 = new Node(2);
         Node node3 = new Node(3);
@@ -43,15 +44,16 @@ class NodeTest {
         node2.addDescendants(node6);
 
         node3.addDescendants(node7);
+        tree = new Tree(parentNode);
     }
 
 
     @Test
     void testDepthFirstTraversing() {
-        parentNode.setTraversingTree(new DepthFirstTraversing());
+        tree.setTraversingTree(new DepthFirstTraversing());
         List<Integer> correctResult = Arrays.asList(1, 2, 5, 6, 3, 7, 4, 8);
         List<Integer> currentResult = new ArrayList<>();
-        for (Node node : parentNode) {
+        for (Node node : tree) {
             currentResult.add(node.getValue());
         }
         assertEquals(correctResult, currentResult);
@@ -59,10 +61,10 @@ class NodeTest {
 
     @Test
     void testBreadthFirstTraversing() {
-        parentNode.setTraversingTree(new BreadthFirstTraversing());
+        tree.setTraversingTree(new BreadthFirstTraversing());
         List<Integer> correctResult = Arrays.asList(1, 2, 3, 4, 8, 5, 6, 7);
         List<Integer> currentResult = new ArrayList<>();
-        for (Node node : parentNode) {
+        for (Node node : tree) {
             currentResult.add(node.getValue());
         }
         assertEquals(correctResult, currentResult);
