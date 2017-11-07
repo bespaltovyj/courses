@@ -1,19 +1,21 @@
 package com.epam.training.task9.rdb;
 
 
-import java.io.File;
-import java.net.URL;
+import com.epam.training.Log;
+import com.epam.training.task9.rdb.exception.CreationTableException;
+
 import java.util.Objects;
 
 
 public class Main {
 
-    public static void main(String[] args) throws Exception {
-        if (args.length > 0 && Objects.equals("createDB", args[0])) {
-            URL url = Thread.currentThread().getContextClassLoader().getResource("rdb.properties");
-            final File fileProperties = new File(url.getFile());
-            Util.executeSQLScript(fileProperties, "createTables.sql");
-            Util.fillTablesFromXMLFile(fileProperties, "test.xml");
+    public static void main(String[] args){
+        try {
+            if (args.length > 0 && Objects.equals("createDB", args[0])) {
+                Util.createTablesAndFillFromXML("rdb.properties", "createTables.sql", "test.xml");
+            }
+        } catch (Exception e) {
+            Log.log.error(e.getMessage());
         }
     }
 

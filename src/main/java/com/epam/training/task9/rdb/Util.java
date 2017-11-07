@@ -30,7 +30,7 @@ public class Util {
         } catch (SQLException e) {
             throw new CreationTableException("Script in file " + nameOfSQLScript + " is invalid", e);
         } catch (IOException e) {
-           throw new CreationTableException(e);
+            throw new CreationTableException(e);
         }
     }
 
@@ -65,5 +65,12 @@ public class Util {
         Data data = deserializer.deserialize(file);
         Serializer serializer = new SerializerInRDB();
         serializer.serialize(data, fileProperties);
+    }
+
+    public static void createTablesAndFillFromXML(String nameOfRDBProperties, String nameOfSQLScript, String nameOfXml) throws Exception {
+        URL url = Thread.currentThread().getContextClassLoader().getResource(nameOfRDBProperties);
+        final File fileProperties = new File(url.getFile());
+        Util.executeSQLScript(fileProperties, nameOfSQLScript);
+        Util.fillTablesFromXMLFile(fileProperties, nameOfXml);
     }
 }
