@@ -9,4 +9,8 @@ public class LoadDataException extends Exception {
     public LoadDataException(String message, Throwable cause) {
         super(message, cause);
     }
+
+    public LoadDataException(Throwable cause) {
+        super(cause);
+    }
 }
