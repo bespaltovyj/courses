@@ -1,10 +1,15 @@
-package com.epam.training.task7.processing;
+package com.epam.training.task7.processing.human_readable_format;
 
 import com.epam.training.task7.Configuration;
 import com.epam.training.task7.data.Data;
+import com.epam.training.task7.processing.Serializer;
+import com.epam.training.task7.processing.Transformation;
+import com.epam.training.task7.processing.human_readable_format.convertor.AuthorRecordStringConverter;
+import com.epam.training.task7.processing.human_readable_format.convertor.BookRecordStringConverter;
+import com.epam.training.task7.processing.human_readable_format.convertor.PublisherRecordStringConverter;
+import com.epam.training.task7.processing.human_readable_format.convertor.RecordStringConverter;
 import com.epam.training.task7.record.DataRecord;
 import com.epam.training.task7.record.Record;
-import com.epam.training.task7.record.StringRepresentation;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,21 +35,29 @@ public class SerializerIntoHumanReadableFormat implements Serializer {
     @Override
     public void serialize(Data data, File file) throws FileNotFoundException {
         try (PrintWriter writer = new PrintWriter(file)) {
-
             DataRecord dataRecord = Transformation.transformDataToRecord(data);
 
-            writeArray(writer, Configuration.NAME_OF_ARRAY_OF_AUTHORS, dataRecord.getAuthors());
-            writeArray(writer, Configuration.NAME_OF_ARRAY_OF_BOOKS, dataRecord.getBooks());
-            writeArray(writer, Configuration.NAME_OF_ARRAY_OF_PUBLISHERS, dataRecord.getPublishers());
+            writeArray(writer
+                    , Configuration.NAME_OF_ARRAY_OF_AUTHORS
+                    , dataRecord.getAuthors()
+                    , new AuthorRecordStringConverter());
+            writeArray(writer
+                    , Configuration.NAME_OF_ARRAY_OF_BOOKS
+                    , dataRecord.getBooks()
+                    , new BookRecordStringConverter());
+            writeArray(writer
+                    , Configuration.NAME_OF_ARRAY_OF_PUBLISHERS
+                    , dataRecord.getPublishers()
+                    , new PublisherRecordStringConverter());
         }
     }
 
-    private void writeArray(PrintWriter writer, String nameArray, List<? extends Record> arrays) {
+    private void writeArray(PrintWriter writer, String nameArray, List<? extends Record> arrays, RecordStringConverter converter) {
         writer.print(nameArray);
         writer.print(Configuration.SEPARATOR_BETWEEN_ARRAY_NAME_AND_ARRAY);
         writer.print(Configuration.LEFT_BORDER_AROUND_ARRAY);
         String arrayInString = arrays.stream()
-                .map(StringRepresentation::getInstanceAsString)
+                .map(converter::getInstanceAsString)
                 .reduce((x, y) -> x + Configuration.SEPARATOR_BETWEEN_ELEMENTS_IN_ARRAY + "\n" + y)
                 .get();
         writer.print(arrayInString);
@@ -52,7 +65,6 @@ public class SerializerIntoHumanReadableFormat implements Serializer {
         writer.println(Configuration.SEPARATOR_BETWEEN_ARRAYS);
         writer.println();
     }
-
 
 
 }

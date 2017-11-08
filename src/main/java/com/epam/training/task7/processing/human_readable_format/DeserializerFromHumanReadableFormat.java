@@ -1,8 +1,13 @@
-package com.epam.training.task7.processing;
+package com.epam.training.task7.processing.human_readable_format;
 
 import com.epam.training.task7.Configuration;
 import com.epam.training.task7.data.Data;
 import com.epam.training.task7.exception.LoadDataException;
+import com.epam.training.task7.processing.Deserializer;
+import com.epam.training.task7.processing.Transformation;
+import com.epam.training.task7.processing.human_readable_format.convertor.AuthorRecordStringConverter;
+import com.epam.training.task7.processing.human_readable_format.convertor.BookRecordStringConverter;
+import com.epam.training.task7.processing.human_readable_format.convertor.PublisherRecordStringConverter;
 import com.epam.training.task7.record.AuthorRecord;
 import com.epam.training.task7.record.BookRecord;
 import com.epam.training.task7.record.DataRecord;
@@ -37,15 +42,15 @@ public class DeserializerFromHumanReadableFormat implements Deserializer {
             for (String instance : instances) {
                 switch (nameArray) {
                     case Configuration.NAME_OF_ARRAY_OF_AUTHORS:
-                        AuthorRecord author = AuthorRecord.getInstanceFromString(instance);
+                        AuthorRecord author = AuthorRecordStringConverter.getInstanceFromString(instance);
                         authors.add(author);
                         break;
                     case Configuration.NAME_OF_ARRAY_OF_BOOKS:
-                        BookRecord book = BookRecord.getInstanceFromString(instance);
+                        BookRecord book = BookRecordStringConverter.getInstanceFromString(instance);
                         books.add(book);
                         break;
                     case Configuration.NAME_OF_ARRAY_OF_PUBLISHERS:
-                        PublisherRecord publisher = PublisherRecord.getInstanceFromString(instance);
+                        PublisherRecord publisher = PublisherRecordStringConverter.getInstanceFromString(instance);
                         publishers.add(publisher);
                         break;
                     default:
