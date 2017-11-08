@@ -1,6 +1,8 @@
 package com.epam.training.task2;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 public class Test {
 

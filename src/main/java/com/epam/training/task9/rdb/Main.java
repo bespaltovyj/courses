@@ -2,7 +2,6 @@ package com.epam.training.task9.rdb;
 
 
 import com.epam.training.Log;
-import com.epam.training.task9.rdb.exception.CreationTableException;
 
 import java.util.Objects;
 

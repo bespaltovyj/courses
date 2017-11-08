@@ -1,6 +1,5 @@
 package com.epam.training.task8;
 
-import com.epam.training.task7.data.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
@@ -11,11 +10,6 @@ import javax.xml.validation.Validator;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Util {
 

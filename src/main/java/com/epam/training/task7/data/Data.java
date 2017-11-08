@@ -1,13 +1,5 @@
 package com.epam.training.task7.data;
 
-import com.epam.training.task7.Configuration;
-import com.epam.training.task7.data.Author;
-import com.epam.training.task7.data.Book;
-import com.epam.training.task7.data.Publisher;
-import com.epam.training.task7.record.AuthorRecord;
-import com.epam.training.task7.record.BookRecord;
-import com.epam.training.task7.record.PublisherRecord;
-
 import java.io.Serializable;
 import java.util.List;
 

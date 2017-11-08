@@ -1,6 +1,5 @@
 package com.epam.training.task8.sax.buffer;
 
-import com.epam.training.task7.record.AuthorRecord;
 import com.epam.training.task7.record.BookRecord;
 
 import java.time.LocalDate;

@@ -1,10 +1,9 @@
 package com.epam.training.task7.record;
 
 import com.epam.training.task7.Configuration;
-import com.epam.training.task7.exception.LoadDataException;
 import com.epam.training.task7.data.Book;
+import com.epam.training.task7.exception.LoadDataException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

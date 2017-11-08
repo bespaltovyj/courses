@@ -1,9 +1,11 @@
 package com.epam.training.task9.rdb.dao;
 
 import com.epam.training.task7.record.BookRecord;
-import com.sun.org.apache.regexp.internal.RE;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

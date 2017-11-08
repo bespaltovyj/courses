@@ -2,7 +2,10 @@ package com.epam.training.task7.processing;
 
 import com.epam.training.task7.data.Data;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public class SerializerIntoBytes implements Serializer {
 

@@ -1,14 +1,15 @@
 package com.epam.training.task7.processing;
 
 import com.epam.training.task7.Configuration;
-import com.epam.training.task7.data.*;
-import com.epam.training.task7.exception.LoadDataException;
-import com.epam.training.task7.record.*;
+import com.epam.training.task7.data.Data;
+import com.epam.training.task7.record.DataRecord;
+import com.epam.training.task7.record.Record;
+import com.epam.training.task7.record.StringRepresentation;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.List;
-import java.util.regex.Matcher;
 
 /**
  * This class implements reading and writing List in human-readable format to a file.

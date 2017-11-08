@@ -1,6 +1,5 @@
 package com.epam.training.task8.sax.buffer;
 
-import com.epam.training.task7.record.BookRecord;
 import com.epam.training.task7.record.PublisherRecord;
 
 import java.util.ArrayList;

@@ -1,7 +1,5 @@
 package com.epam.training.task7.data;
 
-import com.epam.training.task7.Configuration;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;

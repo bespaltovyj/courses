@@ -1,9 +1,5 @@
 package com.epam.training.task7.record;
 
-import com.epam.training.task7.record.AuthorRecord;
-import com.epam.training.task7.record.BookRecord;
-import com.epam.training.task7.record.PublisherRecord;
-
 import java.util.List;
 
 public class DataRecord {

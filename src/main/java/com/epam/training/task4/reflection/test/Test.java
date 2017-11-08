@@ -1,7 +1,7 @@
 package com.epam.training.task4.reflection.test;
 
-import com.epam.training.task4.reflection.ReflectionException;
 import com.epam.training.task4.reflection.Injector;
+import com.epam.training.task4.reflection.ReflectionException;
 import com.epam.training.task4.reflection.Util;
 import com.epam.training.task4.reflection.cache.Cache;
 
