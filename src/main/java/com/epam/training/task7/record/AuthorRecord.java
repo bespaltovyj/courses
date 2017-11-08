@@ -4,6 +4,7 @@ import com.epam.training.task7.Configuration;
 import com.epam.training.task7.exception.LoadDataException;
 import com.epam.training.task7.data.Author;
 import com.epam.training.task7.data.Gender;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -53,6 +54,7 @@ public class AuthorRecord extends Record {
         return gender;
     }
 
+    @JsonIgnore
     public int getAge() {
         return Period.between(this.getDateOfBirth(), this.getDateOfDeath() != null ? dateOfDeath : LocalDate.now()).getYears();
     }
@@ -62,6 +64,7 @@ public class AuthorRecord extends Record {
         return String.valueOf(author.hashCode());
     }
 
+    @JsonIgnore
     @Override
     public String getInstanceAsString() {
         StringBuilder builder = new StringBuilder();
