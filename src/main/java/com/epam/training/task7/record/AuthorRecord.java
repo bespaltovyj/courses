@@ -54,11 +54,6 @@ public class AuthorRecord extends Record {
         return gender;
     }
 
-    @JsonIgnore
-    public int getAge() {
-        return Period.between(this.getDateOfBirth(), this.getDateOfDeath() != null ? dateOfDeath : LocalDate.now()).getYears();
-    }
-
     public static String hashCode(Author author) {
         return String.valueOf(author.hashCode());
     }
