@@ -5,7 +5,7 @@ import com.epam.training.task7.processing.Deserializer;
 import com.epam.training.task7.processing.Serializer;
 import com.epam.training.task8.dom.DeserializerFromXmlWithDomParser;
 import com.epam.training.task9.rdb.exception.CreationTableException;
-import com.epam.training.task9.rdb.processing.SerializerInRDB;
+import com.epam.training.task9.rdb.processing.SerializerIntoRDB;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,7 +63,7 @@ public class Util {
         final File file = new File(url.getFile());
         Deserializer deserializer = new DeserializerFromXmlWithDomParser();
         Data data = deserializer.deserialize(file);
-        Serializer serializer = new SerializerInRDB();
+        Serializer serializer = new SerializerIntoRDB();
         serializer.serialize(data, fileProperties);
     }
 

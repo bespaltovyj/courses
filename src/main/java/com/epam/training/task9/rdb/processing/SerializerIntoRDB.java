@@ -12,7 +12,7 @@ import com.epam.training.task9.rdb.dao.PublisherDAO;
 import java.io.File;
 import java.sql.Connection;
 
-public class SerializerInRDB implements Serializer {
+public class SerializerIntoRDB implements Serializer {
 
     @Override
     public void serialize(Data data, File fileProperties) throws Exception {

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 
-public class SerializerInJSON implements Serializer {
+public class SerializerIntoJSON implements Serializer {
 
     @Override
     public void serialize(Data data, File file) throws Exception {

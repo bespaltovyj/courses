@@ -2,11 +2,9 @@ package com.epam.training.task9;
 
 import com.epam.training.task7.data.Data;
 import com.epam.training.task7.processing.Deserializer;
-import com.epam.training.task7.processing.Serializer;
 import com.epam.training.task8.dom.DeserializerFromXmlWithDomParser;
 import com.epam.training.task9.rdb.Util;
 import com.epam.training.task9.rdb.processing.DeserializerFromRDB;
-import com.epam.training.task9.rdb.processing.SerializerInRDB;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
