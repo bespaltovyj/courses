@@ -17,7 +17,6 @@ public class PersistenceTest {
 
     @Test
     void testDeserializerFromRDB() throws Exception {
-        Util.dropTables("dropTables.sql");
         Util.createTablesAndFillFromXML("createTables.sql", "test.xml");
 
         URL urlXmlFile = Thread.currentThread().getContextClassLoader().getResource("test.xml");
