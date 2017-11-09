@@ -1,0 +1,5 @@
+set "mongo_dir=C:\Program Files\MongoDB\Server\3.4\bin"
+set "mongo_data_dir=P:\mongo_data"
+set "db_name1=first"
+set "db_name2=second"
+set "db_name3=third"
