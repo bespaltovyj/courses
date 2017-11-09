@@ -19,14 +19,14 @@ public class AuthorDAO extends DAO {
     public List<AuthorRecord> getEntities() throws InterruptedException {
         List<AuthorRecord> authorRecords = new ArrayList<>();
         ConnectionWrapper connection = connectionPool.getConnection();
-        try (Statement statement = connection.createStatement()){
-            final String query = "SELECT * FROM AUTHOR;";
+        try (Statement statement = connection.createStatement()) {
+            final String query = "SELECT A.id,A.name,A.date_of_birth,A.date_of_death,A.gender FROM AUTHOR A;";
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
                 AuthorRecord authorRecord = getEntity(resultSet);
                 authorRecords.add(authorRecord);
             }
-        } catch(SQLException e){
+        } catch (SQLException e) {
             Log.log.error(e);
         }
         connectionPool.relieveConnection(connection.getId());
@@ -36,8 +36,8 @@ public class AuthorDAO extends DAO {
     protected AuthorRecord getEntity(ResultSet resultSet) throws SQLException {
         String id = resultSet.getString("id");
         String name = resultSet.getString("name");
-        Date dateOfBirth = resultSet.getDate("dateOfBirth");
-        Date dateOfDeath = resultSet.getDate("dateOfDeath");
+        Date dateOfBirth = resultSet.getDate("date_of_birth");
+        Date dateOfDeath = resultSet.getDate("date_of_death");
         String gender = resultSet.getString("gender");
         return new AuthorRecord(
                 id

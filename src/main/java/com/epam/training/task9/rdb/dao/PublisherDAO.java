@@ -21,7 +21,7 @@ public class PublisherDAO extends DAO {
         List<PublisherRecord> publisherRecords = new ArrayList<>();
         ConnectionWrapper connection = connectionPool.getConnection();
         try (Statement statement = connection.createStatement()) {
-            final String queryForPublishers = "SELECT * FROM PUBLISHER;";
+            final String queryForPublishers = "SELECT P.id FROM PUBLISHER P;";
             ResultSet resultSetPublishers = statement.executeQuery(queryForPublishers);
             while (resultSetPublishers.next()) {
                 PublisherRecord publisherRecord = getEntity(resultSetPublishers);
@@ -44,10 +44,10 @@ public class PublisherDAO extends DAO {
         List<String> booksId = new ArrayList<>();
         ConnectionWrapper connection = connectionPool.getConnection();
         try (Statement statement = connection.createStatement()) {
-            final String query = String.format("SELECT B.bookId FROM Book_Publisher B WHERE B.publisherId='%s';", publisherId);
+            final String query = String.format("SELECT BP.book_id FROM BOOK_PUBLISHER BP WHERE BP.publisher_id='%s';", publisherId);
             ResultSet resultBooksId = statement.executeQuery(query);
             while (resultBooksId.next()) {
-                booksId.add(resultBooksId.getString("bookId"));
+                booksId.add(resultBooksId.getString("book_id"));
             }
         }
         connectionPool.relieveConnection(connection.getId());

@@ -19,7 +19,7 @@ public class BookDAO extends DAO {
         List<BookRecord> bookRecords = new ArrayList<>();
         ConnectionWrapper connection = connectionPool.getConnection();
         try (Statement statement = connection.createStatement()) {
-            final String queryForBooks = "SELECT * FROM BOOK;";
+            final String queryForBooks = "SELECT B.id,B.name,B.date_of_release FROM BOOK B;";
             ResultSet resultSetBooks = statement.executeQuery(queryForBooks);
             while (resultSetBooks.next()) {
                 BookRecord bookRecord = getEntity(resultSetBooks);
@@ -35,7 +35,7 @@ public class BookDAO extends DAO {
     protected BookRecord getEntity(ResultSet resultSetBooks) throws SQLException, InterruptedException {
         String id = resultSetBooks.getString("id");
         String name = resultSetBooks.getString("name");
-        Date dateOfRelease = resultSetBooks.getDate("dateOfRelease");
+        Date dateOfRelease = resultSetBooks.getDate("date_of_release");
         List<String> authorsId = getAuthorsIdByBook(id);
         return new BookRecord(id, name, dateOfRelease.toLocalDate(), authorsId);
     }
@@ -44,10 +44,10 @@ public class BookDAO extends DAO {
         List<String> authorsId = new ArrayList<>();
         ConnectionWrapper connection = connectionPool.getConnection();
         try (Statement statement = connection.createStatement()) {
-            final String query = String.format("SELECT A.authorId FROM Author_Book A WHERE A.bookId='%s';", bookId);
+            final String query = String.format("SELECT AB.author_id FROM AUTHOR_BOOK AB WHERE AB.book_id='%s';", bookId);
             ResultSet resultAuthorsId = statement.executeQuery(query);
             while (resultAuthorsId.next()) {
-                authorsId.add(resultAuthorsId.getString("authorId"));
+                authorsId.add(resultAuthorsId.getString("author_id"));
             }
         } catch (SQLException e) {
             Log.log.error(e);
@@ -59,7 +59,7 @@ public class BookDAO extends DAO {
     public void insertBooksInTable(List<BookRecord> bookRecords) throws SQLException, InterruptedException {
         ConnectionWrapper connection = connectionPool.getConnection();
         connection.createStatement().executeUpdate(String.format("INSERT INTO BOOK VALUES %s;", getStringRepresentationOfBooks(bookRecords)));
-        connection.createStatement().executeUpdate(String.format("INSERT INTO Author_Book VALUES %s;", getStringRepresentationAuthorsIdAndBooksId(bookRecords)));
+        connection.createStatement().executeUpdate(String.format("INSERT INTO AUTHOR_BOOK VALUES %s;", getStringRepresentationAuthorsIdAndBooksId(bookRecords)));
         connectionPool.relieveConnection(connection.getId());
     }
 

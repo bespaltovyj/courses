@@ -2,25 +2,25 @@ DROP TABLE IF EXISTS AUTHOR,BOOK,AUTHOR_BOOK,PUBLISHER,BOOK_PUBLISHER;
 CREATE TABLE AUTHOR(
   id VARCHAR PRIMARY KEY
   ,name VARCHAR(20)
-  ,dateOfBirth DATE
-  ,dateOfDeath DATE
+  ,date_of_birth DATE
+  ,date_of_death DATE
   ,gender VARCHAR(6)
 );
 CREATE TABLE BOOK(
   id VARCHAR PRIMARY KEY
   ,name VARCHAR(20)
-  ,dateOfRelease DATE
+  ,date_of_release DATE
 );
 CREATE TABLE AUTHOR_BOOK(
-  authorId VARCHAR
-  ,bookId VARCHAR
-  ,PRIMARY KEY (authorId,bookId)
+  author_id VARCHAR
+  ,book_id VARCHAR
+  ,PRIMARY KEY (author_id,book_id)
 );
 CREATE TABLE PUBLISHER(
   id VARCHAR PRIMARY KEY
 );
 CREATE TABLE BOOK_PUBLISHER(
-  bookId VARCHAR
-  ,publisherId VARCHAR
-  ,PRIMARY KEY (bookId,publisherId)
+  book_id VARCHAR
+  ,publisher_id VARCHAR
+  ,PRIMARY KEY (book_id,publisher_id)
 );
