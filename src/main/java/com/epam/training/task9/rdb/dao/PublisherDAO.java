@@ -26,6 +26,7 @@ public class PublisherDAO extends DAO {
             while (resultSetPublishers.next()) {
                 PublisherRecord publisherRecord = getEntity(resultSetPublishers);
                 publisherRecords.add(publisherRecord);
+                Log.traceLogger.info("PublisherRecord " + publisherRecord.getId() + " is created");
             }
         } catch (SQLException e) {
             Log.log.error(e);

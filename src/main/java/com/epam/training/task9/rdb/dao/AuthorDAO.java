@@ -25,6 +25,7 @@ public class AuthorDAO extends DAO {
             while (resultSet.next()) {
                 AuthorRecord authorRecord = getEntity(resultSet);
                 authorRecords.add(authorRecord);
+                Log.traceLogger.info("AuthorRecord " + authorRecord.getId() + " is created");
             }
         } catch (SQLException e) {
             Log.log.error(e);

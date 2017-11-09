@@ -24,6 +24,7 @@ public class BookDAO extends DAO {
             while (resultSetBooks.next()) {
                 BookRecord bookRecord = getEntity(resultSetBooks);
                 bookRecords.add(bookRecord);
+                Log.traceLogger.info("BookRecord " + bookRecord.getId() + " is created");
             }
         } catch (SQLException e) {
             Log.log.error(e);

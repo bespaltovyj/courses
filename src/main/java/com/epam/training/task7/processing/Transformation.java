@@ -1,5 +1,6 @@
 package com.epam.training.task7.processing;
 
+import com.epam.training.Log;
 import com.epam.training.task7.data.Author;
 import com.epam.training.task7.data.Book;
 import com.epam.training.task7.data.Data;
@@ -56,8 +57,7 @@ public abstract class Transformation {
                 Author author = validateFieldsAndCreateAuthor(authorRecord);
                 authors.put(authorRecord.getId(), author);
             } catch (ValidateDataException e) {
-                //TODO FIX TO LOG
-                System.out.println(e.getMessage());
+                Log.log.error(e);
             }
         }
         return authors;
@@ -79,8 +79,7 @@ public abstract class Transformation {
                 Book book = validateFieldsAndCreateBook(bookRecord, authors);
                 books.put(bookRecord.getId(), book);
             } catch (ValidateDataException e) {
-                //TODO FIX TO LOG
-                System.out.println(e.getMessage());
+                Log.log.error(e);
             }
         }
         return books;
@@ -108,8 +107,7 @@ public abstract class Transformation {
                 Publisher publisher = validateFieldsAndCreatePublisher(publisherRecord, books);
                 publishers.put(publisherRecord.getId(), publisher);
             } catch (ValidateDataException e) {
-                //TODO FIX TO LOG
-                System.out.println(e.getMessage());
+                Log.log.error(e);
             }
         }
         return publishers;
