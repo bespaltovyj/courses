@@ -1,4 +1,3 @@
-DROP TABLE Author,Book,Author_Book,Publisher,Book_Publisher;
 CREATE TABLE Author(
   id VARCHAR PRIMARY KEY
   ,name VARCHAR(20)

@@ -17,7 +17,8 @@ public class PersistenceTest {
 
     @Test
     void testDeserializerFromRDB() throws Exception {
-        Util.createTablesAndFillFromXML("rdb.properties", "createTables.sql", "test.xml");
+        Util.dropTables("dropTables.sql");
+        Util.createTablesAndFillFromXML("createTables.sql", "test.xml");
 
         URL urlXmlFile = Thread.currentThread().getContextClassLoader().getResource("test.xml");
         final File fileXml = new File(urlXmlFile.getFile());
@@ -31,5 +32,6 @@ public class PersistenceTest {
         Data dataFromRDB = deserializerRDB.deserialize(fileRDBProperties);
 
         assertEquals(dataFromXml, dataFromRDB);
+        Util.CONNECTION_POOL.closeConnections();
     }
 }

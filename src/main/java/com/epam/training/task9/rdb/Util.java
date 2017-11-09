@@ -17,24 +17,31 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.Scanner;
 
 public class Util {
 
     public final static ConnectionPool CONNECTION_POOL = createConnectionPool("rdb.properties");
 
-    public static void executeSQLScript(File fileProperties, String nameOfSQLScript) throws CreationTableException {
+    public static void executeSQLScript(String nameOfSQLScript) throws CreationTableException {
         try {
             final String script = getSQLScriptByFileName(nameOfSQLScript);
-            Connection connection = createConnection(fileProperties);
+            ConnectionWrapper connection = CONNECTION_POOL.getConnection();
             connection.createStatement().execute(script);
-            connection.close();
+            CONNECTION_POOL.relieveConnection(connection.getId());
         } catch (CreationTableException e) {
             throw new CreationTableException("File " + nameOfSQLScript + " is invalid", e);
         } catch (SQLException e) {
             throw new CreationTableException("Script in file " + nameOfSQLScript + " is invalid", e);
-        } catch (IOException e) {
-            throw new CreationTableException(e);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+    }
+
+    public static void executeQuery(String query) throws InterruptedException, SQLException {
+        ConnectionWrapper connection = CONNECTION_POOL.getConnection();
+        connection.createStatement().execute(query);
+        CONNECTION_POOL.relieveConnection(connection.getId());
     }
 
     private static String getSQLScriptByFileName(String nameOfSQLScript) throws CreationTableException {
@@ -77,19 +84,32 @@ public class Util {
         return DriverManager.getConnection(properties.getProperty("url"), properties.getProperty("user"), properties.getProperty("password"));
     }
 
-    public static void fillTablesFromXMLFile(File fileProperties, String nameOfXMLFile) throws Exception {
+    public static void fillTablesFromXMLFile(String nameOfXMLFile) throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource(nameOfXMLFile);
         final File file = new File(url.getFile());
         Deserializer deserializer = new DeserializerFromXmlWithDomParser();
         Data data = deserializer.deserialize(file);
         Serializer serializer = new SerializerIntoRDB(CONNECTION_POOL);
-        serializer.serialize(data, fileProperties);
+        serializer.serialize(data, null);
     }
 
-    public static void createTablesAndFillFromXML(String nameOfRDBProperties, String nameOfSQLScript, String nameOfXml) throws Exception {
-        URL url = Thread.currentThread().getContextClassLoader().getResource(nameOfRDBProperties);
-        final File fileProperties = new File(url.getFile());
-        Util.executeSQLScript(fileProperties, nameOfSQLScript);
-        Util.fillTablesFromXMLFile(fileProperties, nameOfXml);
+    public static void dropTables(String nameOfSQLScript) throws FileNotFoundException, InterruptedException {
+        URL url = Thread.currentThread().getContextClassLoader().getResource(nameOfSQLScript);
+        final File file = new File(url.getFile());
+        Scanner scanner = new Scanner(file);
+        while (scanner.hasNextLine()) {
+            String query = scanner.nextLine();
+            try {
+                executeQuery(query);
+            } catch (SQLException e) {
+                Log.log.error(e);
+            }
+        }
+    }
+
+    public static void createTablesAndFillFromXML(String nameOfSQLScript, String nameOfXml) throws Exception {
+        final String script = getSQLScriptByFileName(nameOfSQLScript);
+        executeQuery(script);
+        fillTablesFromXMLFile(nameOfXml);
     }
 }
