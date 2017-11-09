@@ -23,21 +23,6 @@ public class Util {
 
     public final static ConnectionPool CONNECTION_POOL = createConnectionPool("rdb.properties");
 
-    public static void executeSQLScript(String nameOfSQLScript) throws CreationTableException {
-        try {
-            final String script = getSQLScriptByFileName(nameOfSQLScript);
-            ConnectionWrapper connection = CONNECTION_POOL.getConnection();
-            connection.createStatement().execute(script);
-            CONNECTION_POOL.relieveConnection(connection.getId());
-        } catch (CreationTableException e) {
-            throw new CreationTableException("File " + nameOfSQLScript + " is invalid", e);
-        } catch (SQLException e) {
-            throw new CreationTableException("Script in file " + nameOfSQLScript + " is invalid", e);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void executeQuery(String query) throws InterruptedException, SQLException {
         ConnectionWrapper connection = CONNECTION_POOL.getConnection();
         connection.createStatement().execute(query);
