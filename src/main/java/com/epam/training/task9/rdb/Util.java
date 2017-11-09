@@ -1,5 +1,6 @@
 package com.epam.training.task9.rdb;
 
+import com.epam.training.Log;
 import com.epam.training.task7.data.Data;
 import com.epam.training.task7.processing.Deserializer;
 import com.epam.training.task7.processing.Serializer;
@@ -18,6 +19,8 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class Util {
+
+    public final static ConnectionPool CONNECTION_POOL = createConnectionPool("rdb.properties");
 
     public static void executeSQLScript(File fileProperties, String nameOfSQLScript) throws CreationTableException {
         try {
@@ -50,7 +53,23 @@ public class Util {
         }
     }
 
-    public static Connection createConnection(File fileProperties) throws IOException, SQLException {
+    private static ConnectionPool createConnectionPool(String nameOfFileProperties) {
+        try {
+            URL url = Thread.currentThread().getContextClassLoader().getResource(nameOfFileProperties);
+            final File fileProperties = new File(url.getFile());
+            ConnectionPool connectionPool = new ConnectionPool();
+            connectionPool.addConnection(createConnection(fileProperties));
+            connectionPool.addConnection(createConnection(fileProperties));
+            connectionPool.addConnection(createConnection(fileProperties));
+            return connectionPool;
+        } catch (InterruptedException | IOException | SQLException e) {
+            Log.log.fatal(e);
+        }
+        return null;
+    }
+
+
+    private static Connection createConnection(File fileProperties) throws IOException, SQLException {
         Properties properties = new Properties();
         try (FileInputStream fileInputStream = new FileInputStream(fileProperties)) {
             properties.load(fileInputStream);
@@ -63,7 +82,7 @@ public class Util {
         final File file = new File(url.getFile());
         Deserializer deserializer = new DeserializerFromXmlWithDomParser();
         Data data = deserializer.deserialize(file);
-        Serializer serializer = new SerializerIntoRDB();
+        Serializer serializer = new SerializerIntoRDB(CONNECTION_POOL);
         serializer.serialize(data, fileProperties);
     }
 

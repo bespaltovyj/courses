@@ -27,7 +27,7 @@ public class PersistenceTest {
         URL urlRDBPropertiesFile = Thread.currentThread().getContextClassLoader().getResource("rdb.properties");
         final File fileRDBProperties = new File(urlRDBPropertiesFile.getFile());
 
-        Deserializer deserializerRDB = new DeserializerFromRDB();
+        Deserializer deserializerRDB = new DeserializerFromRDB(Util.CONNECTION_POOL);
         Data dataFromRDB = deserializerRDB.deserialize(fileRDBProperties);
 
         assertEquals(dataFromXml, dataFromRDB);

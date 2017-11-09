@@ -2,8 +2,9 @@ package com.epam.training.task9.rdb.dao;
 
 import com.epam.training.Log;
 import com.epam.training.task7.record.PublisherRecord;
+import com.epam.training.task9.rdb.ConnectionPool;
+import com.epam.training.task9.rdb.ConnectionWrapper;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,12 +13,13 @@ import java.util.List;
 
 public class PublisherDAO extends DAO {
 
-    public PublisherDAO(Connection connection) {
-        super(connection);
+    public PublisherDAO(ConnectionPool connectionPool) {
+        super(connectionPool);
     }
 
-    public List<PublisherRecord> getEntities() {
+    public List<PublisherRecord> getEntities() throws InterruptedException {
         List<PublisherRecord> publisherRecords = new ArrayList<>();
+        ConnectionWrapper connection = connectionPool.getConnection();
         try (Statement statement = connection.createStatement()) {
             final String queryForPublishers = "SELECT * FROM PUBLISHER;";
             ResultSet resultSetPublishers = statement.executeQuery(queryForPublishers);
@@ -28,30 +30,37 @@ public class PublisherDAO extends DAO {
         } catch (SQLException e) {
             Log.log.error(e);
         }
+        connectionPool.relieveConnection(connection.getId());
         return publisherRecords;
     }
 
-    protected PublisherRecord getEntity(ResultSet resultSetPublishers) throws SQLException {
+    protected PublisherRecord getEntity(ResultSet resultSetPublishers) throws SQLException, InterruptedException {
         String id = resultSetPublishers.getString("id");
         List<String> booksId = getBooksIdByPublisher(id);
         return new PublisherRecord(id, booksId);
     }
 
-    private List<String> getBooksIdByPublisher(String publisherId) throws SQLException {
-        final String query = String.format("SELECT B.bookId FROM Book_Publisher B WHERE B.publisherId='%s';", publisherId);
+    private List<String> getBooksIdByPublisher(String publisherId) throws SQLException, InterruptedException {
         List<String> booksId = new ArrayList<>();
-        ResultSet resultBooksId = connection.createStatement().executeQuery(query);
-        while (resultBooksId.next()) {
-            booksId.add(resultBooksId.getString("bookId"));
+        ConnectionWrapper connection = connectionPool.getConnection();
+        try (Statement statement = connection.createStatement()) {
+            final String query = String.format("SELECT B.bookId FROM Book_Publisher B WHERE B.publisherId='%s';", publisherId);
+            ResultSet resultBooksId = statement.executeQuery(query);
+            while (resultBooksId.next()) {
+                booksId.add(resultBooksId.getString("bookId"));
+            }
         }
+        connectionPool.relieveConnection(connection.getId());
         return booksId;
     }
 
-    public void insertPublishersIntoTables(List<PublisherRecord> publisherRecords) throws SQLException {
+    public void insertPublishersIntoTables(List<PublisherRecord> publisherRecords) throws SQLException, InterruptedException {
+        ConnectionWrapper connection = connectionPool.getConnection();
         String queryForInsertInPublisher = String.format("INSERT INTO PUBLISHER VALUES %s;", getStringRepresentationOfPublishers(publisherRecords));
         connection.createStatement().executeUpdate(queryForInsertInPublisher);
         String queryForInsertInBookPublisher = String.format("INSERT INTO Book_Publisher VALUES %s;", getStringRepresentationBooksIdAndPublishersId(publisherRecords));
         connection.createStatement().executeUpdate(queryForInsertInBookPublisher);
+        connectionPool.relieveConnection(connection.getId());
     }
 
     private static String getStringRepresentationOfPublishers(List<PublisherRecord> publisherRecords) {

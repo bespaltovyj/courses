@@ -3,7 +3,8 @@ package com.epam.training.task9.rdb.dao;
 import com.epam.training.Log;
 import com.epam.training.task7.data.Gender;
 import com.epam.training.task7.record.AuthorRecord;
-import com.epam.training.task7.record.Record;
+import com.epam.training.task9.rdb.ConnectionPool;
+import com.epam.training.task9.rdb.ConnectionWrapper;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,22 +12,24 @@ import java.util.List;
 
 public class AuthorDAO extends DAO {
 
-    public AuthorDAO(Connection connection) {
-        super(connection);
+    public AuthorDAO(ConnectionPool connectionPool) {
+        super(connectionPool);
     }
 
-    public List<AuthorRecord> getEntities() {
+    public List<AuthorRecord> getEntities() throws InterruptedException {
         List<AuthorRecord> authorRecords = new ArrayList<>();
-        try (Statement statement = connection.createStatement()) {
+        ConnectionWrapper connection = connectionPool.getConnection();
+        try (Statement statement = connection.createStatement()){
             final String query = "SELECT * FROM AUTHOR;";
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
                 AuthorRecord authorRecord = getEntity(resultSet);
                 authorRecords.add(authorRecord);
             }
-        } catch (SQLException e) {
+        } catch(SQLException e){
             Log.log.error(e);
         }
+        connectionPool.relieveConnection(connection.getId());
         return authorRecords;
     }
 
@@ -45,7 +48,8 @@ public class AuthorDAO extends DAO {
         );
     }
 
-    public void insertAuthorsInTable(List<AuthorRecord> authorRecords) {
+    public void insertAuthorsInTable(List<AuthorRecord> authorRecords) throws InterruptedException {
+        ConnectionWrapper connection = connectionPool.getConnection();
         try (Statement statement = connection.createStatement()) {
             String values = authorRecords
                     .stream()
@@ -56,6 +60,7 @@ public class AuthorDAO extends DAO {
         } catch (SQLException e) {
             Log.log.error(e);
         }
+        connectionPool.relieveConnection(connection.getId());
     }
 
 

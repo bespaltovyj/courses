@@ -4,6 +4,7 @@ import com.epam.training.task7.data.Data;
 import com.epam.training.task7.processing.Serializer;
 import com.epam.training.task7.processing.Transformation;
 import com.epam.training.task7.record.DataRecord;
+import com.epam.training.task9.rdb.ConnectionPool;
 import com.epam.training.task9.rdb.Util;
 import com.epam.training.task9.rdb.dao.AuthorDAO;
 import com.epam.training.task9.rdb.dao.BookDAO;
@@ -14,21 +15,24 @@ import java.sql.Connection;
 
 public class SerializerIntoRDB implements Serializer {
 
+    private ConnectionPool connectionPool;
+
+    public SerializerIntoRDB(ConnectionPool connectionPool) {
+        this.connectionPool = connectionPool;
+    }
+
     @Override
     public void serialize(Data data, File fileProperties) throws Exception {
         DataRecord dataRecord = Transformation.transformDataToRecord(data);
 
-        Connection connection = Util.createConnection(fileProperties);
-
-        AuthorDAO authorDAO = new AuthorDAO(connection);
+        AuthorDAO authorDAO = new AuthorDAO(connectionPool);
         authorDAO.insertAuthorsInTable(dataRecord.getAuthors());
 
-        BookDAO bookDAO = new BookDAO(connection);
+        BookDAO bookDAO = new BookDAO(connectionPool);
         bookDAO.insertBooksInTable(dataRecord.getBooks());
 
-        PublisherDAO publisherDAO = new PublisherDAO(connection);
+        PublisherDAO publisherDAO = new PublisherDAO(connectionPool);
         publisherDAO.insertPublishersIntoTables(dataRecord.getPublishers());
 
-        connection.close();
     }
 }

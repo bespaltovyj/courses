@@ -8,6 +8,7 @@ import com.epam.training.task7.record.AuthorRecord;
 import com.epam.training.task7.record.BookRecord;
 import com.epam.training.task7.record.DataRecord;
 import com.epam.training.task7.record.PublisherRecord;
+import com.epam.training.task9.rdb.ConnectionPool;
 import com.epam.training.task9.rdb.Util;
 import com.epam.training.task9.rdb.dao.AuthorDAO;
 import com.epam.training.task9.rdb.dao.BookDAO;
@@ -20,23 +21,28 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class DeserializerFromRDB implements Deserializer {
+
+    private ConnectionPool connectionPool;
+
+    public DeserializerFromRDB(ConnectionPool connectionPool) {
+        this.connectionPool = connectionPool;
+    }
+
     @Override
     public Data deserialize(File fileProperties) throws LoadDataException {
         try {
-            Connection connection = Util.createConnection(fileProperties);
-
-            AuthorDAO authorDAO = new AuthorDAO(connection);
+            AuthorDAO authorDAO = new AuthorDAO(connectionPool);
             List<AuthorRecord> authors = authorDAO.getEntities();
 
-            BookDAO bookDAO = new BookDAO(connection);
+            BookDAO bookDAO = new BookDAO(connectionPool);
             List<BookRecord> books = bookDAO.getEntities();
 
-            PublisherDAO publisherDAO = new PublisherDAO(connection);
+            PublisherDAO publisherDAO = new PublisherDAO(connectionPool);
             List<PublisherRecord> publishers = publisherDAO.getEntities();
 
             DataRecord dataRecord = new DataRecord(authors, books, publishers);
             return Transformation.transformRecordToData(dataRecord);
-        } catch (SQLException | IOException e) {
+        } catch (InterruptedException e) {
             throw new LoadDataException(e);
         }
     }
