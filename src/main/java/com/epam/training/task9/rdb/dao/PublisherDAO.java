@@ -1,10 +1,12 @@
 package com.epam.training.task9.rdb.dao;
 
+import com.epam.training.Log;
 import com.epam.training.task7.record.PublisherRecord;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,18 +16,22 @@ public class PublisherDAO extends DAO {
         super(connection);
     }
 
-    public List<PublisherRecord> getPublishers() throws SQLException {
-        final String queryForPublishers = "SELECT * FROM PUBLISHER;";
+    public List<PublisherRecord> getEntities() {
         List<PublisherRecord> publisherRecords = new ArrayList<>();
-        ResultSet resultSetPublishers = connection.createStatement().executeQuery(queryForPublishers);
-        while (resultSetPublishers.next()) {
-            PublisherRecord publisherRecord = getPublishers(resultSetPublishers);
-            publisherRecords.add(publisherRecord);
+        try (Statement statement = connection.createStatement()) {
+            final String queryForPublishers = "SELECT * FROM PUBLISHER;";
+            ResultSet resultSetPublishers = statement.executeQuery(queryForPublishers);
+            while (resultSetPublishers.next()) {
+                PublisherRecord publisherRecord = getEntity(resultSetPublishers);
+                publisherRecords.add(publisherRecord);
+            }
+        } catch (SQLException e) {
+            Log.log.error(e);
         }
         return publisherRecords;
     }
 
-    private PublisherRecord getPublishers(ResultSet resultSetPublishers) throws SQLException {
+    protected PublisherRecord getEntity(ResultSet resultSetPublishers) throws SQLException {
         String id = resultSetPublishers.getString("id");
         List<String> booksId = getBooksIdByPublisher(id);
         return new PublisherRecord(id, booksId);

@@ -1,12 +1,11 @@
 package com.epam.training.task9.rdb.dao;
 
+import com.epam.training.Log;
 import com.epam.training.task7.data.Gender;
 import com.epam.training.task7.record.AuthorRecord;
+import com.epam.training.task7.record.Record;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,18 +15,22 @@ public class AuthorDAO extends DAO {
         super(connection);
     }
 
-    public List<AuthorRecord> getAuthors() throws SQLException {
-        final String query = "SELECT * FROM AUTHOR;";
+    public List<AuthorRecord> getEntities() {
         List<AuthorRecord> authorRecords = new ArrayList<>();
-        ResultSet resultSet = connection.createStatement().executeQuery(query);
-        while (resultSet.next()) {
-            AuthorRecord authorRecord = getAuthor(resultSet);
-            authorRecords.add(authorRecord);
+        try (Statement statement = connection.createStatement()) {
+            final String query = "SELECT * FROM AUTHOR;";
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                AuthorRecord authorRecord = getEntity(resultSet);
+                authorRecords.add(authorRecord);
+            }
+        } catch (SQLException e) {
+            Log.log.error(e);
         }
         return authorRecords;
     }
 
-    private AuthorRecord getAuthor(ResultSet resultSet) throws SQLException {
+    protected AuthorRecord getEntity(ResultSet resultSet) throws SQLException {
         String id = resultSet.getString("id");
         String name = resultSet.getString("name");
         Date dateOfBirth = resultSet.getDate("dateOfBirth");
@@ -42,14 +45,19 @@ public class AuthorDAO extends DAO {
         );
     }
 
-    public void insertAuthorsInTable(List<AuthorRecord> authorRecords) throws SQLException {
-        String values = authorRecords
-                .stream()
-                .map(AuthorDAO::getRepresentationAuthorAsString)
-                .reduce((x, y) -> x + "," + y)
-                .get();
-        connection.createStatement().executeUpdate(String.format("INSERT INTO AUTHOR VALUES %s;", values));
+    public void insertAuthorsInTable(List<AuthorRecord> authorRecords) {
+        try (Statement statement = connection.createStatement()) {
+            String values = authorRecords
+                    .stream()
+                    .map(AuthorDAO::getRepresentationAuthorAsString)
+                    .reduce((x, y) -> x + "," + y)
+                    .get();
+            statement.executeUpdate(String.format("INSERT INTO AUTHOR VALUES %s;", values));
+        } catch (SQLException e) {
+            Log.log.error(e);
+        }
     }
+
 
     private static String getRepresentationAuthorAsString(AuthorRecord authorRecord) {
         return String.format("('%s','%s',DATE '%s',%s,'%s')"

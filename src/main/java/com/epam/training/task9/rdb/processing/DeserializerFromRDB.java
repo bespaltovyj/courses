@@ -26,13 +26,13 @@ public class DeserializerFromRDB implements Deserializer {
             Connection connection = Util.createConnection(fileProperties);
 
             AuthorDAO authorDAO = new AuthorDAO(connection);
-            List<AuthorRecord> authors = authorDAO.getAuthors();
+            List<AuthorRecord> authors = authorDAO.getEntities();
 
             BookDAO bookDAO = new BookDAO(connection);
-            List<BookRecord> books = bookDAO.getBooks();
+            List<BookRecord> books = bookDAO.getEntities();
 
             PublisherDAO publisherDAO = new PublisherDAO(connection);
-            List<PublisherRecord> publishers = publisherDAO.getPublishers();
+            List<PublisherRecord> publishers = publisherDAO.getEntities();
 
             DataRecord dataRecord = new DataRecord(authors, books, publishers);
             return Transformation.transformRecordToData(dataRecord);

@@ -1,11 +1,9 @@
 package com.epam.training.task9.rdb.dao;
 
+import com.epam.training.Log;
 import com.epam.training.task7.record.BookRecord;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,18 +13,22 @@ public class BookDAO extends DAO {
         super(connection);
     }
 
-    public List<BookRecord> getBooks() throws SQLException {
-        final String queryForBooks = "SELECT * FROM BOOK;";
+    public List<BookRecord> getEntities() {
         List<BookRecord> bookRecords = new ArrayList<>();
-        ResultSet resultSetBooks = connection.createStatement().executeQuery(queryForBooks);
-        while (resultSetBooks.next()) {
-            BookRecord bookRecord = getBook(resultSetBooks);
-            bookRecords.add(bookRecord);
+        try (Statement statement = connection.createStatement()) {
+            final String queryForBooks = "SELECT * FROM BOOK;";
+            ResultSet resultSetBooks = statement.executeQuery(queryForBooks);
+            while (resultSetBooks.next()) {
+                BookRecord bookRecord = getEntity(resultSetBooks);
+                bookRecords.add(bookRecord);
+            }
+        } catch (SQLException e) {
+            Log.log.error(e);
         }
         return bookRecords;
     }
 
-    private BookRecord getBook(ResultSet resultSetBooks) throws SQLException {
+    protected BookRecord getEntity(ResultSet resultSetBooks) throws SQLException {
         String id = resultSetBooks.getString("id");
         String name = resultSetBooks.getString("name");
         Date dateOfRelease = resultSetBooks.getDate("dateOfRelease");
