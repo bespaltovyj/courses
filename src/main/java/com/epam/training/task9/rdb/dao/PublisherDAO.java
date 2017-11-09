@@ -57,10 +57,16 @@ public class PublisherDAO extends DAO {
 
     public void insertPublishersIntoTables(List<PublisherRecord> publisherRecords) throws SQLException, InterruptedException {
         ConnectionWrapper connection = connectionPool.getConnection();
-        String queryForInsertInPublisher = String.format("INSERT INTO PUBLISHER VALUES %s;", getStringRepresentationOfPublishers(publisherRecords));
-        connection.createStatement().executeUpdate(queryForInsertInPublisher);
-        String queryForInsertInBookPublisher = String.format("INSERT INTO Book_Publisher VALUES %s;", getStringRepresentationBooksIdAndPublishersId(publisherRecords));
-        connection.createStatement().executeUpdate(queryForInsertInBookPublisher);
+        connection.setAutoCommit(false);
+        try (Statement statement = connection.createStatement()) {
+            String queryForInsertInPublisher = String.format("INSERT INTO PUBLISHER VALUES %s;", getStringRepresentationOfPublishers(publisherRecords));
+            statement.executeUpdate(queryForInsertInPublisher);
+        }
+        try (Statement statement = connection.createStatement()) {
+            String queryForInsertInBookPublisher = String.format("INSERT INTO Book_Publisher VALUES %s;", getStringRepresentationBooksIdAndPublishersId(publisherRecords));
+            statement.executeUpdate(queryForInsertInBookPublisher);
+        }
+        connection.commit();
         connectionPool.relieveConnection(connection.getId());
     }
 

@@ -24,4 +24,12 @@ public class ConnectionWrapper {
     public Statement createStatement() throws SQLException {
         return connection.createStatement();
     }
+
+    public void setAutoCommit(boolean autoCommit) throws SQLException {
+        connection.setAutoCommit(autoCommit);
+    }
+
+    public void commit() throws SQLException {
+        connection.commit();
+    }
 }

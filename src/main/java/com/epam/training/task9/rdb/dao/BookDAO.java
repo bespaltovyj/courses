@@ -59,8 +59,14 @@ public class BookDAO extends DAO {
 
     public void insertBooksInTable(List<BookRecord> bookRecords) throws SQLException, InterruptedException {
         ConnectionWrapper connection = connectionPool.getConnection();
-        connection.createStatement().executeUpdate(String.format("INSERT INTO BOOK VALUES %s;", getStringRepresentationOfBooks(bookRecords)));
-        connection.createStatement().executeUpdate(String.format("INSERT INTO AUTHOR_BOOK VALUES %s;", getStringRepresentationAuthorsIdAndBooksId(bookRecords)));
+        connection.setAutoCommit(false);
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(String.format("INSERT INTO BOOK VALUES %s;", getStringRepresentationOfBooks(bookRecords)));
+        }
+        try(Statement statement = connection.createStatement()){
+            statement.executeUpdate(String.format("INSERT INTO AUTHOR_BOOK VALUES %s;", getStringRepresentationAuthorsIdAndBooksId(bookRecords)));
+        }
+        connection.commit();
         connectionPool.relieveConnection(connection.getId());
     }
 
