@@ -19,6 +19,8 @@ public abstract class DAO {
 
     public abstract List<? extends Record> getEntities() throws InterruptedException;
 
-    protected abstract Record getEntity(ResultSet resultSet) throws SQLException, InterruptedException;
+    public abstract Record getEntityById(String id) throws InterruptedException;
+
+    protected abstract Record parseEntity(ResultSet resultSet) throws SQLException, InterruptedException;
 
 }

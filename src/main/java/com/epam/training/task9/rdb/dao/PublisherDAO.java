@@ -2,9 +2,11 @@ package com.epam.training.task9.rdb.dao;
 
 import com.epam.training.Log;
 import com.epam.training.task7.record.PublisherRecord;
+import com.epam.training.task7.record.Record;
 import com.epam.training.task9.rdb.ConnectionPool;
 import com.epam.training.task9.rdb.ConnectionWrapper;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -24,7 +26,7 @@ public class PublisherDAO extends DAO {
             final String queryForPublishers = "SELECT P.id FROM PUBLISHER P;";
             ResultSet resultSetPublishers = statement.executeQuery(queryForPublishers);
             while (resultSetPublishers.next()) {
-                PublisherRecord publisherRecord = getEntity(resultSetPublishers);
+                PublisherRecord publisherRecord = parseEntity(resultSetPublishers);
                 publisherRecords.add(publisherRecord);
                 Log.traceLogger.info("PublisherRecord " + publisherRecord.getId() + " is created");
             }
@@ -35,7 +37,7 @@ public class PublisherDAO extends DAO {
         return publisherRecords;
     }
 
-    protected PublisherRecord getEntity(ResultSet resultSetPublishers) throws SQLException, InterruptedException {
+    protected PublisherRecord parseEntity(ResultSet resultSetPublishers) throws SQLException, InterruptedException {
         String id = resultSetPublishers.getString("id");
         List<String> booksId = getBooksIdByPublisher(id);
         return new PublisherRecord(id, booksId);
@@ -53,6 +55,25 @@ public class PublisherDAO extends DAO {
         }
         connectionPool.relieveConnection(connection.getId());
         return booksId;
+    }
+
+    @Override
+    public PublisherRecord getEntityById(String id) throws InterruptedException {
+        ConnectionWrapper connection = connectionPool.getConnection();
+        PublisherRecord publisherRecord = null;
+        final String query = "SELECT P.id FROM PUBLISHER P WHERE P.id=?";
+        try (PreparedStatement preparedStatement = connection.preparedStatement(query)) {
+            preparedStatement.setString(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                publisherRecord = parseEntity(resultSet);
+                Log.traceLogger.info("PublisherRecord " + publisherRecord.getId() + " is created");
+            }
+        } catch (SQLException e) {
+            Log.log.error(e);
+        }
+        connectionPool.relieveConnection(connection.getId());
+        return publisherRecord;
     }
 
     public void insertPublishersIntoTables(List<PublisherRecord> publisherRecords) throws SQLException, InterruptedException {

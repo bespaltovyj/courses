@@ -23,7 +23,7 @@ public class AuthorDAO extends DAO {
             final String query = "SELECT A.id,A.name,A.date_of_birth,A.date_of_death,A.gender FROM AUTHOR A;";
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                AuthorRecord authorRecord = getEntity(resultSet);
+                AuthorRecord authorRecord = parseEntity(resultSet);
                 authorRecords.add(authorRecord);
                 Log.traceLogger.info("AuthorRecord " + authorRecord.getId() + " is created");
             }
@@ -34,7 +34,26 @@ public class AuthorDAO extends DAO {
         return authorRecords;
     }
 
-    protected AuthorRecord getEntity(ResultSet resultSet) throws SQLException {
+    @Override
+    public AuthorRecord getEntityById(String id) throws InterruptedException {
+        ConnectionWrapper connection = connectionPool.getConnection();
+        AuthorRecord authorRecord = null;
+        final String query = "SELECT A.id,A.name,A.date_of_birth,A.date_of_death,A.gender FROM AUTHOR A WHERE A.id=?";
+        try (PreparedStatement preparedStatement = connection.preparedStatement(query)) {
+            preparedStatement.setString(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                authorRecord = parseEntity(resultSet);
+                Log.traceLogger.info("AuthorRecord " + authorRecord.getId() + " is created");
+            }
+        } catch (SQLException e) {
+            Log.log.error(e);
+        }
+        connectionPool.relieveConnection(connection.getId());
+        return authorRecord;
+    }
+
+    protected AuthorRecord parseEntity(ResultSet resultSet) throws SQLException {
         String id = resultSet.getString("id");
         String name = resultSet.getString("name");
         Date dateOfBirth = resultSet.getDate("date_of_birth");

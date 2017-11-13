@@ -2,6 +2,7 @@ package com.epam.training.task9.rdb.dao;
 
 import com.epam.training.Log;
 import com.epam.training.task7.record.BookRecord;
+import com.epam.training.task7.record.Record;
 import com.epam.training.task9.rdb.ConnectionPool;
 import com.epam.training.task9.rdb.ConnectionWrapper;
 
@@ -22,7 +23,7 @@ public class BookDAO extends DAO {
             final String queryForBooks = "SELECT B.id,B.name,B.date_of_release FROM BOOK B;";
             ResultSet resultSetBooks = statement.executeQuery(queryForBooks);
             while (resultSetBooks.next()) {
-                BookRecord bookRecord = getEntity(resultSetBooks);
+                BookRecord bookRecord = parseEntity(resultSetBooks);
                 bookRecords.add(bookRecord);
                 Log.traceLogger.info("BookRecord " + bookRecord.getId() + " is created");
             }
@@ -33,7 +34,7 @@ public class BookDAO extends DAO {
         return bookRecords;
     }
 
-    protected BookRecord getEntity(ResultSet resultSetBooks) throws SQLException, InterruptedException {
+    protected BookRecord parseEntity(ResultSet resultSetBooks) throws SQLException, InterruptedException {
         String id = resultSetBooks.getString("id");
         String name = resultSetBooks.getString("name");
         Date dateOfRelease = resultSetBooks.getDate("date_of_release");
@@ -57,13 +58,32 @@ public class BookDAO extends DAO {
         return authorsId;
     }
 
+    @Override
+    public BookRecord getEntityById(String id) throws InterruptedException {
+        ConnectionWrapper connection = connectionPool.getConnection();
+        BookRecord bookRecord = null;
+        final String query = "SELECT B.id,B.name,B.date_of_release FROM BOOK B WHERE B.id=?";
+        try (PreparedStatement preparedStatement = connection.preparedStatement(query)) {
+            preparedStatement.setString(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                bookRecord = parseEntity(resultSet);
+                Log.traceLogger.info("BookRecord " + bookRecord.getId() + " is created");
+            }
+        } catch (SQLException e) {
+            Log.log.error(e);
+        }
+        connectionPool.relieveConnection(connection.getId());
+        return bookRecord;
+    }
+
     public void insertBooksInTable(List<BookRecord> bookRecords) throws SQLException, InterruptedException {
         ConnectionWrapper connection = connectionPool.getConnection();
         connection.setAutoCommit(false);
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(String.format("INSERT INTO BOOK VALUES %s;", getStringRepresentationOfBooks(bookRecords)));
         }
-        try(Statement statement = connection.createStatement()){
+        try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(String.format("INSERT INTO AUTHOR_BOOK VALUES %s;", getStringRepresentationAuthorsIdAndBooksId(bookRecords)));
         }
         connection.commit();
