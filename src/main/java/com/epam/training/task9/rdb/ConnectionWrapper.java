@@ -1,6 +1,7 @@
 package com.epam.training.task9.rdb;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.UUID;
@@ -31,5 +32,9 @@ public class ConnectionWrapper {
 
     public void commit() throws SQLException {
         connection.commit();
+    }
+
+    public PreparedStatement preparedStatement(String query) throws SQLException {
+        return connection.prepareStatement(query);
     }
 }
